@@ -23,28 +23,22 @@ logsource:
     category: process_creation
     product: windows
 detection:
-    # Example: reg add "HKLM\SYSTEM\CurrentControlSet\Control\CI\Config" /v VulnerableDriverBlocklistEnable /t REG_DWORD /d 0 /f
-    selection_reg_img:
-        - Image|endswith:
-              - '\reg.exe'
-              - '\regedit.exe'
-        - OriginalFileName:
-              - 'reg.exe'
-              - 'regedit.exe'
-    selection_reg_cmd:
-        CommandLine|contains: 'add '
-    # Example: Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\CI\Config" -Name "VulnerableDriverBlocklistEnable" -Value 0 -Type DWord
-    selection_powershell_img:
+    selection_img:
         - Image|endswith:
               - '\powershell.exe'
               - '\pwsh.exe'
               - '\powershell_ise.exe'
+              - '\reg.exe'
+              - '\regedit.exe'
         - OriginalFileName:
               - 'PowerShell.EXE'
               - 'pwsh.dll'
               - 'powershell_ise.exe'
-    selection_powershell_cmd:
+              - 'reg.exe'
+              - 'regedit.exe'
+    selection_cli:
         CommandLine|contains:
+            - 'add '
             - 'New-ItemProperty '
             - 'Set-ItemProperty '
             - 'si '  # SetItem Alias
@@ -56,7 +50,7 @@ detection:
         CommandLine|contains|all:
             - 'VulnerableDriverBlocklistEnable'
             - '0'
-    condition: all of selection_key_* and (all of selection_reg_* or all of selection_powershell_*)
+    condition: all of selection_*
 falsepositives:
     - It is very unlikely for legitimate activities to disable the Vulnerable Driver Blocklist via command line tools; thus it is recommended to investigate promptly.
 level: high
