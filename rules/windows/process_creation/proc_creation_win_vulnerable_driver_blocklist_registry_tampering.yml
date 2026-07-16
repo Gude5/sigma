@@ -12,8 +12,10 @@ description: |
 references:
     - https://www.sophos.com/en-us/blog/sharpening-the-knife-gold-blades-strategic-evolution
     - https://learn.microsoft.com/en-us/windows/security/application-security/application-control/app-control-for-business/design/microsoft-recommended-driver-block-rules
+    - https://www.derp.ca/research/poisonx-windowstelemetry-byovd-rat/
 author: Swachchhanda Shrawan Poudel (Nextron Systems)
 date: 2026-01-26
+modified: 2026-07-16
 tags:
     - attack.defense-impairment
     - attack.t1685
@@ -21,26 +23,40 @@ logsource:
     category: process_creation
     product: windows
 detection:
-    selection_img:
+    # Example: reg add "HKLM\SYSTEM\CurrentControlSet\Control\CI\Config" /v VulnerableDriverBlocklistEnable /t REG_DWORD /d 0 /f
+    selection_reg_img:
+        - Image|endswith:
+              - '\reg.exe'
+              - '\regedit.exe'
+        - OriginalFileName:
+              - 'reg.exe'
+              - 'regedit.exe'
+    selection_reg_cmd:
+        CommandLine|contains: 'add '
+    # Example: Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\CI\Config" -Name "VulnerableDriverBlocklistEnable" -Value 0 -Type DWord
+    selection_powershell_img:
         - Image|endswith:
               - '\powershell.exe'
               - '\pwsh.exe'
-              - '\reg.exe'
+              - '\powershell_ise.exe'
         - OriginalFileName:
               - 'PowerShell.EXE'
               - 'pwsh.dll'
-              - 'reg.exe'
-    selection_cli_1:
+              - 'powershell_ise.exe'
+    selection_powershell_cmd:
         CommandLine|contains:
-            - 'add '
             - 'New-ItemProperty '
             - 'Set-ItemProperty '
             - 'si '  # SetItem Alias
-    selection_cli_2:
-        CommandLine|contains|all:
+    selection_key_path:
+        CommandLine|contains:
             - '\Control\CI\Config'
+            - '\SYSTEM\CurrentControlSet\Control\CI\Config'
+    selection_key_value:
+        CommandLine|contains|all:
             - 'VulnerableDriverBlocklistEnable'
-    condition: all of selection_*
+            - '0'
+    condition: all of selection_key_* and (all of selection_reg_* or all of selection_powershell_*)
 falsepositives:
     - It is very unlikely for legitimate activities to disable the Vulnerable Driver Blocklist via command line tools; thus it is recommended to investigate promptly.
 level: high

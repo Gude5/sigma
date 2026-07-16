@@ -14,8 +14,10 @@ references:
     - https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/microsoft-recommended-driver-block-rules
     - https://www.sophos.com/en-us/blog/sharpening-the-knife-gold-blades-strategic-evolution
     - https://learn.microsoft.com/en-us/windows/security/application-security/application-control/app-control-for-business/design/microsoft-recommended-driver-block-rules
+    - https://www.derp.ca/research/poisonx-windowstelemetry-byovd-rat/
 author: Swachchhanda Shrawan Poudel (Nextron Systems)
 date: 2026-01-26
+modified: 2026-07-16
 tags:
     - attack.defense-impairment
     - attack.t1685
@@ -24,6 +26,16 @@ logsource:
     product: windows
 detection:
     selection:
+        Image|endswith:
+            - '\powershell.exe'
+            - '\pwsh.exe'
+            - '\powershell_ise.exe'
+            - '\reg.exe'
+            - '\regedit.exe'
+            - '\wscript.exe'
+            - '\cscript.exe'
+            - '\mshta.exe'
+            - '\rundll32.exe'
         TargetObject|endswith: '\Control\CI\Config\VulnerableDriverBlocklistEnable'
         Details: 'DWORD (0x00000000)'
     condition: selection
