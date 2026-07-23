@@ -26,16 +26,6 @@ logsource:
     product: windows
 detection:
     selection:
-        Image|endswith:
-            - '\powershell.exe'
-            - '\pwsh.exe'
-            - '\powershell_ise.exe'
-            - '\reg.exe'
-            - '\regedit.exe'
-            - '\wscript.exe'
-            - '\cscript.exe'
-            - '\mshta.exe'
-            - '\rundll32.exe'
         TargetObject|endswith: '\Control\CI\Config\VulnerableDriverBlocklistEnable'
         Details: 'DWORD (0x00000000)'
     condition: selection
