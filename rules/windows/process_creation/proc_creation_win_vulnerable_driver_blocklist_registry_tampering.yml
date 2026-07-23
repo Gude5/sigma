@@ -27,13 +27,10 @@ detection:
         - Image|endswith:
               - '\powershell.exe'
               - '\pwsh.exe'
-              - '\powershell_ise.exe'
               - '\reg.exe'
-              - '\regedit.exe'
         - OriginalFileName:
               - 'PowerShell.EXE'
               - 'pwsh.dll'
-              - 'powershell_ise.exe'
               - 'reg.exe'
               - 'regedit.exe'
     selection_cli:
