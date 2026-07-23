@@ -38,10 +38,8 @@ detection:
             - 'New-ItemProperty '
             - 'Set-ItemProperty '
             - 'si '  # SetItem Alias
-    selection_key_path:
-        CommandLine|contains:
+        CommandLine|contains|all:
             - '\Control\CI\Config'
-            - '\SYSTEM\CurrentControlSet\Control\CI\Config'
     selection_key_value:
         CommandLine|contains|all:
             - 'VulnerableDriverBlocklistEnable'
