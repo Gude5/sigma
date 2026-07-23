@@ -32,7 +32,6 @@ detection:
               - 'PowerShell.EXE'
               - 'pwsh.dll'
               - 'reg.exe'
-              - 'regedit.exe'
     selection_cli:
         CommandLine|contains:
             - 'add '
