@@ -40,10 +40,7 @@ detection:
             - 'si '  # SetItem Alias
         CommandLine|contains|all:
             - '\Control\CI\Config'
-    selection_key_value:
-        CommandLine|contains|all:
             - 'VulnerableDriverBlocklistEnable'
-            - '0'
     condition: all of selection_*
 falsepositives:
     - It is very unlikely for legitimate activities to disable the Vulnerable Driver Blocklist via command line tools; thus it is recommended to investigate promptly.
